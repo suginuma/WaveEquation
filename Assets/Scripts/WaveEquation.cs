@@ -7,10 +7,13 @@ public class WaveEquation
     private int latest_;
     private int width_;
 
+    public float getRenderTextureWidth() { return width_; }
+
     static readonly int material_PrevTex = Shader.PropertyToID("_PrevTex");
     static readonly int material_PrevPrevTex = Shader.PropertyToID("_PrevPrevTex");
     static readonly int material_Stride = Shader.PropertyToID("_Stride");
     static readonly int material_InputTex = Shader.PropertyToID("_InputTex");
+    static readonly int material_WaveTex = Shader.PropertyToID("_WaveTex");
 
     public void init(int width, RenderTextureFormat format, bool clamp)
     {
@@ -48,6 +51,11 @@ public class WaveEquation
         Graphics.Blit(render_texture_list_[prev], render_texture_list_[front_], material);
         latest_ = front_;
         front_ = prevprev;
+    }
+
+    public void bind(Material material)
+    {
+        material.SetTexture(material_WaveTex, render_texture_list_[latest_]);
     }
 
     public RenderTexture getLatestRenderTexture()
